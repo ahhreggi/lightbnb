@@ -1,17 +1,6 @@
-const properties = require("./json/properties.json");
-const users = require("./json/users.json");
+const { query } = require("./db/index")
 
-const { Pool } = require("pg");
-
-const pool = new Pool({
-  user: "ahhreggi",
-  password: "123",
-  port: "5432",
-  host: "localhost",
-  database: "lightbnb"
-});
-
-/// Users
+// USERS //////////////////////////////////////////////////
 
 /**
  * Get a single user from the database given their email.
@@ -28,7 +17,7 @@ const getUserWithEmail = function(email) {
 
   const queryParams = [email];
 
-  return pool.query(queryString, queryParams)
+  return query(queryString, queryParams)
     .then(res => res.rows[0]);
 
 };
@@ -49,7 +38,7 @@ const getUserWithId = function(id) {
 
   const queryParams = [id];
 
-  return pool.query(queryString, queryParams)
+  return query(queryString, queryParams)
     .then(res => res.rows[0]);
 
 };
@@ -71,13 +60,13 @@ const addUser =  function(user) {
 
   const queryParams = [user.name, user.email, user.password];
 
-  return pool.query(queryString, queryParams)
+  return query(queryString, queryParams)
     .then(res => res.rows[0]);
 
 };
 exports.addUser = addUser;
 
-/// Reservations
+// RESERVATIONS //////////////////////////////////////////////////
 
 /**
  * Get all reservations for a single user.
@@ -99,13 +88,13 @@ const getAllReservations = function(guest_id, limit = 10) {
 
   const queryParams = [guest_id, limit];
 
-  return pool.query(queryString, queryParams)
+  return query(queryString, queryParams)
     .then(res => res.rows);
 
 };
 exports.getAllReservations = getAllReservations;
 
-/// Properties
+// PROPERTIES //////////////////////////////////////////////////
 
 /**
  * Get all properties.
@@ -152,12 +141,11 @@ const getAllProperties = function(options, limit = 10) {
     LIMIT $${queryParams.length};
   `;
 
-  return pool.query(queryString, queryParams)
+  return query(queryString, queryParams)
     .then(res => res.rows);
 
 };
 exports.getAllProperties = getAllProperties;
-
 
 /**
  * Add a property to the database
@@ -204,7 +192,7 @@ const addProperty = function(property) {
     property.post_code
   ];
 
-  return pool.query(queryString, queryParams)
+  return query(queryString, queryParams)
     .then(res => res.rows[0]);
 
 };
