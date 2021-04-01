@@ -10,9 +10,9 @@ const { query } = require("./db/index")
 const getUserWithEmail = function(email) {
 
   const queryString = `
-  SELECT *
-  FROM users
-  WHERE email = $1
+    SELECT *
+    FROM users
+    WHERE email = $1
   `;
 
   const queryParams = [email];
@@ -31,9 +31,9 @@ exports.getUserWithEmail = getUserWithEmail;
 const getUserWithId = function(id) {
 
   const queryString = `
-  SELECT *
-  FROM users
-  WHERE id = $1
+    SELECT *
+    FROM users
+    WHERE id = $1
   `;
 
   const queryParams = [id];
@@ -53,9 +53,9 @@ exports.getUserWithId = getUserWithId;
 const addUser =  function(user) {
 
   const queryString = `
-  INSERT INTO users (name, email, password)
-  VALUES ($1, $2, $3)
-  RETURNING *;
+    INSERT INTO users (name, email, password)
+    VALUES ($1, $2, $3)
+    RETURNING *;
   `;
 
   const queryParams = [user.name, user.email, user.password];
@@ -76,14 +76,14 @@ exports.addUser = addUser;
 const getAllReservations = function(guest_id, limit = 10) {
 
   const queryString = `
-  SELECT reservations.*, properties.*, AVG(rating) AS average_rating
-  FROM reservations
-  JOIN properties ON reservations.property_id = properties.id
-  JOIN property_reviews ON properties.id = property_reviews.property_id
-  WHERE reservations.guest_id = $1 AND end_date < now()::date
-  GROUP BY reservations.id, properties.id
-  ORDER BY reservations.start_date
-  LIMIT $2;
+    SELECT reservations.*, properties.*, AVG(rating) AS average_rating
+    FROM reservations
+    JOIN properties ON reservations.property_id = properties.id
+    JOIN property_reviews ON properties.id = property_reviews.property_id
+    WHERE reservations.guest_id = $1 AND end_date < now()::date
+    GROUP BY reservations.id, properties.id
+    ORDER BY reservations.start_date
+    LIMIT $2;
   `;
 
   const queryParams = [guest_id, limit];
@@ -105,10 +105,10 @@ exports.getAllReservations = getAllReservations;
 const getAllProperties = function(options, limit = 10) {
 
   let queryString = `
-  SELECT properties.*, AVG(property_reviews.rating) AS average_rating
-  FROM properties
-  JOIN property_reviews ON properties.id = property_id
-  WHERE true
+    SELECT properties.*, AVG(property_reviews.rating) AS average_rating
+    FROM properties
+    JOIN property_reviews ON properties.id = property_id
+    WHERE true
   `;
 
   const queryParams = [];
